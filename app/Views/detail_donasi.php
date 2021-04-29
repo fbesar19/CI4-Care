@@ -29,7 +29,7 @@
             background-image: linear-gradient(to right,
                     rgba(26, 37, 66, 0.7),
                     rgba(106, 140, 231, 0.7)),
-                url("background-1.jpg");
+                url("<?= base_url('background-1.jpg') ?>");
             background-size: cover;
             background-position: center;
         }
@@ -87,79 +87,46 @@
         </div>
     </nav>
 
-    <!-- beranda -->
-    <div class="container-fluid bg-primary py-5 baner" id="Beranda">
-        <div class="container py-5">
-            <div class="col-md-4 text-white">
-                <h1 class="text-white">#temanBERDASI</h1>
-                <hr class="border border-4 border-white" width="150">
-                <p>#temanBERDASI merupakan program yang diadakan oleh Suncode.id lewat CARE untuk membantu mereka-mereka yang terdampak bencana dan membutuhkan uluran tangan.</p>
-                <button class="btn border border-2 border-white text-white rounded-pill mt-3 px-4">Mulai Berdonasi</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- deskripsi -->
-    <div class="container-fluid bg-white py-5 my-5" data-aos="fade-up" data-aos-duration="1000">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 py-5">
-                    <h3 class="text-primary">Kenapa harus donasi di CARE??</h3>
-                    <span>Berikut alasan kenapa kamu harus ikut donasi di CARE</span>
-                </div>
-                <div class="col-md-3 bg-light text-center p-4">
-                    <img src="mudah.png" height="60" class="mt-3" alt="">
-                    <h5 class="mt-2">Mudah</h5>
-                    <p class="text-muted">Untuk berdonasi dapat dilakun secara online atau datang ke poskoBERDASI</p>
-                </div>
-                <div class="col-md-3 bg-white text-center p-4 shadow" style="z-index: 3;">
-                    <img src="transparan.png" height="60" class="mt-3" alt="">
-                    <h5 class="mt-2">Transparan</h5>
-                    <p class="text-muted">Dana yang sudah tersalurkan akan ada dokumentasi nya langsung di web CARE</p>
-                </div>
-                <div class="col-md-3 text-center p-4">
-
-                </div>
-                <div class="col-md-3 bg-light text-center p-4">
-                    <img src="tersampaikan.png" height="60" class="mt-3" alt="">
-                    <h5 class="mt-2">Tersampaikan</h5>
-                    <p class="text-muted">Dana yang didonasikan sudah pasti tersampaikan kepada yang dituju</p>
-                </div>
-                <div class="col-md-3 bg-white text-center p-4 shadow" style="z-index: 3;">
-                    <img src="jelas.png" height="60" class="mt-3" alt="">
-                    <h5 class="mt-2">Jelas</h5>
-                    <p class="text-muted">Setiap penggalangan dana memiliki progress yang dapat dilihat di web CARE</p>
-                </div>
-                <div class="col-md-3 bg-light text-center p-4">
-                    <img src="cepat.png" height="60" class="mt-3" alt="">
-                    <h5 class="mt-2">Cepat</h5>
-                    <p class="text-muted">Apabila dana sudah terkumpul akan langsung didistribusikan</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tertimoni -->
-    <div class="container text-center py-4 mb-4" data-aos="fade-up" data-aos-duration="1000">
+    <div class="container my-4 py-5" data-aos="fade-up" data-aos-duration="1000">
         <div class="row">
-            <div class="col-md-6 px-0">
-                <div id="carouselExampleControls" class="slide carousel-fade" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="background-1.jpg" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="anak-kecil.jpg" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="anak-yatim.jpg" class="d-block w-100" alt="...">
+            <?php
+            foreach ($detail as $d) :
+                $total = 0;
+                foreach ($dana as $d_dana) {
+                    if ($d['id'] == $d_dana['detail_donasi']) {
+                        $total = $total + $d_dana['nominal'];
+                    }
+                }
+            ?>
+                <div class="col-md-6">
+                    <img src="<?= base_url('foto_donasi/' . $d['gambar']) ?>" alt="" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <h2><?= $d['judul'] ?></h2>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <h5>Terkumpul</h5>
+                        <h5><?= rupiah($total); ?></h5>
+                    </div>
+                    <div class="my-3">
+                        <progress value="<?= $total ?>" max="<?= $d['target_biaya'] ?>"></progress>
+                    </div>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">Donasi Sekarang</button>
+                </div>
+
+            <?php endforeach; ?>
+            <div class="row my-2">
+                <?php foreach ($donatur as $dnt) : ?>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5><?= $dnt['nama_donatur']; ?></h5>
+                                <span>Telah Berdonasi sebesar</span>
+                                <h5><?= rupiah($dnt['nominal']); ?></h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 p-5 text-start">
-                <h3 class="text-primary mt-5">Mereka yang sudah bisa tersenyum lagi karena bantuan <u>#temanBERDASI</u></h3>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -178,7 +145,7 @@
                 }
             ?>
                 <div class="col-md-3 my-3">
-                    <a href="home/detail_donasi/<?= $data['id']; ?>">
+                    <a href="<?= base_url('home/detail_donasi/' . $data['id']); ?>">
                         <div class="card shadow-sm rounded">
                             <img src="<?= base_url('/foto_Donasi/' . $data['gambar']); ?>" class="card-img-top foto-bencana" alt="...">
                             <div class="card-body">
@@ -202,8 +169,40 @@
                     </a>
                 </div>
             <?php endforeach; ?>
+
         </div>
     </div>
+
+    <!-- Modal Tambah -->
+    <div class="modal fade mt-5 pt-5" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Penggalangan Donasi</h5>
+                </div>
+                <form action="<?= base_url('/home/berdonasi/' . $id); ?>" method="post">
+                    <div class="modal-body">
+
+                        <input type="hidden" value="<?php $id; ?>" name="detail_donasi">
+                        <div class="form-group mb-3">
+                            <label for="productname"><strong>Nama Lengkap</strong></label>
+                            <input class="form-control" type="text" placeholder="Masukan nama lengkap" name="nama_donatur" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="productname"><strong>Nominal</strong></label>
+                            <input class="form-control" type="text" onchange="myFunction()" placeholder="Masukan nominal" name="nominal" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" name="submit" class="btn btn-primary">Konfirmasi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Akhir Modal -->
 
     <div class="container-fluid bg-primary p-5 text-center baner">
         <span class="text-white">Sudahkah anda berdonasi hari ini?</span>
@@ -216,6 +215,7 @@
             <small>CARE ~ Copyright &copy;2021</small>
         </div>
     </footer>
+
     <?php
     function rupiah($angka)
     {
@@ -231,6 +231,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script>
         AOS.init();
+    </script>
+    <script>
+        $(document).ready(function() {
+            // Format mata uang.
+            $('#besar_bayar').mask('0,000,000,000,000,000', {
+                reverse: true
+            });
+
+        })
     </script>
 </body>
 
